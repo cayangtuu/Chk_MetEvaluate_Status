@@ -35,7 +35,7 @@ print('Connected to SQLite')
 for Dir in DirList:
    DirNm = workDir+'wrfout.'+Dir+'12'
    if os.path.isdir(DirNm): 
-     if len(os.listdir(DirNm)) >= 97:
+     if len(os.listdir(DirNm)) >= 197:
        Insert_DD(TableNm, (Dir, 'yes'))  
      else:
        Insert_DD(TableNm, (Dir, 'no'))  
