@@ -3,10 +3,10 @@
 ### Setting Area ###
 
 set ChkDir = `pwd`
-set MainDir = /simenvi.a/model/cayang/Taipower
-set DDtmpDir = ${MainDir}/simenvi/proj001/wrf/data 
+set MainDir = "/simenvi.a/model/cayang/Taipower"
+set DDtmpDir = "${MainDir}/simenvi/proj001/wrf/data" 
 set DDataDir = ${DDtmpDir}
-set wktmpDir = ${MainDir}/simenvi/proj001/wrf/wktmp
+set wktmpDir = "${MainDir}/simenvi/proj001/wrf/wktmp"
 
 ### End Of Setting Area ###
 
@@ -14,14 +14,14 @@ set wktmpDir = ${MainDir}/simenvi/proj001/wrf/wktmp
 ### Executing Area ###
 
 ### Anaconda
-setenv CondaDIR ${MainDir}/calpuff/anaconda3
+setenv CondaDIR "${MainDir}/calpuff/anaconda3"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if ($? != 0 ) then
    eval "$__conda_setup"
-   if ( -f ${CondaDIR}/etc/profile.d/conda.csh ) then
-      source ${CondaDIR}/etc/profile.d/conda.csh
+   if ( -f "${CondaDIR}/etc/profile.d/conda.csh" ) then
+      source "${CondaDIR}/etc/profile.d/conda.csh"
    else
       setenv PATH "${CondaDIR}/bin:$PATH"
    endif
@@ -57,21 +57,21 @@ while ( $BadDate < = $#readFil & ($nowHH>2 | $nowHH<18))
   ### Remove WRF File and Forder On Specific Date
   # 刪除站存工作資料夾
   if ( -d ${wktmpDir}/$readFil[$BadDate]12_* ) then
-     /bin/rm -rf ${wktmpDir}/$readFil[$BadDate]12_*
+     /bin/rm -rf "${wktmpDir}/$readFil[$BadDate]12_*"
   endif
   # 刪除暫存資料夾(gfs & wrfout)
-  if ( -d ${DDtmpDir}/gfs/gfs.$readFil[$BadDate]12) then
-     /bin/rm -rf ${DDtmpDir}/gfs/gfs.$readFil[$BadDate]12
+  if ( -d "${DDtmpDir}/gfs/gfs.$readFil[$BadDate]12") then
+     /bin/rm -rf "${DDtmpDir}/gfs/gfs.$readFil[$BadDate]12"
   endif
-  if ( -f ${DDtmpDir}/wrfout/wrfout.$readFil[$BadDate]12) then
-     /bin/rm -f ${DDtmpDir}/wrfout/wrfout.$readFil[$BadDate]12
+  if ( -f "${DDtmpDir}/wrfout/wrfout.$readFil[$BadDate]12") then
+     /bin/rm -f "${DDtmpDir}/wrfout/wrfout.$readFil[$BadDate]12"
   endif
   # 刪除檔案資料夾(gfs & wrfout)
-  if ( -d ${DDataDir}/gfs/gfs.$readFil[$BadDate]12) then
-     /bin/rm -rf ${DDataDir}/gfs/gfs.$readFil[$BadDate]12
+  if ( -d "${DDataDir}/gfs/gfs.$readFil[$BadDate]12") then
+     /bin/rm -rf "${DDataDir}/gfs/gfs.$readFil[$BadDate]12"
   endif
-  if ( -d ${DDataDir}/wrfout/wrfout.$readFil[$BadDate]12) then
-     /bin/rm -rf ${DDataDir}/wrfout/wrfout.$readFil[$BadDate]12
+  if ( -d "${DDataDir}/wrfout/wrfout.$readFil[$BadDate]12") then
+     /bin/rm -rf "${DDataDir}/wrfout/wrfout.$readFil[$BadDate]12"
   endif
   wait
 
