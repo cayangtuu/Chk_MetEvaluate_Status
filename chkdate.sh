@@ -3,11 +3,11 @@ ulimit -c unlimited
 
 ### Setting Area ###
 
-MainDir=/simenvi.a/model/cayang/Taipower
-ChkDir=${MainDir}/forecast/chkfile
-DDtmpDir=${MainDir}/simenvi/proj001/wrf/data 
+MainDir=... #執行程式主目錄
+ChkDir=${MainDir}/forecast/chkfile #執行程式工作目錄
+DDtmpDir=${MainDir}/.../wrf/data  #儲存資料檔案目錄
 DDataDir=${DDtmpDir}
-wktmpDir=${MainDir}/simenvi/proj001/wrf/wktmp
+wktmpDir=${MainDir}/.../wrf/wktmp #wrf暫存檔資料目錄
 
 ### End Of Setting Area ###
 

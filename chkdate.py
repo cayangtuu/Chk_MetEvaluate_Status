@@ -7,8 +7,8 @@ import os
 def main():
     global wrfDir, workDir, TableNm, cur, conn
     ## 基本資料設定
-    wrfDir = '/simenvi.a/model/cayang/Taipower/simenvi/proj001/wrf/data/wrfout/'
-    workDir = '/simenvi.a/model/cayang/Taipower/forecast/chkfile/'
+    wrfDir = '.../wrf/data/wrfout/' # WRF檔案目錄
+    workDir = '.../forecast/chkfile/' #執行程式工作目錄
     TableNm = 'WRFDate'
     WrfNm_D4   = 97
 
