@@ -5,22 +5,21 @@ import os
 
 ### ===主程式===
 def main():
-    global workDir, TableNm, cur, conn
+    global wrfDir, workDir, TableNm, cur, conn
     ## 基本資料設定
-    workDir = '/simenvi.a/model/cayang/Taipower/simenvi/proj001/wrf/data/wrfout/'
+    wrfDir = '/simenvi.a/model/cayang/Taipower/simenvi/proj001/wrf/data/wrfout/'
+    workDir = '/simenvi.a/model/cayang/Taipower/forecast/chkfile/'
     TableNm = 'WRFDate'
-    WrfNm_DAll = 97
     WrfNm_D4   = 97
 
     yesterDay = (pd.Timestamp.today()-pd.Timedelta(1,'d'))
-    DirList = {tt.strftime('%Y%m%d'):WrfNm_DAll \
-               if tt.strftime('%Y%m')==yesterDay.strftime('%Y%m') else WrfNm_D4 \
+    DirList = {tt.strftime('%Y%m%d'):WrfNm_D4 \
                for tt in pd.date_range(end=yesterDay, periods=8)}
     print(DirList)
 
 
     ## 連線至資料庫
-    conn = sqlite3.connect('SimEnvi.DB')
+    conn = sqlite3.connect(workDir+'SimEnvi.DB')
     cur = conn.cursor()
     print('Connected to SQLite')
 
@@ -35,7 +34,7 @@ def main():
       # HList = [(HTIME, HState),]  
       # HTime:日期，格式為YYYYMMDD ; HState:狀態，格式為'yes' or 'no'
 #   HType = 'Update'   
-#   HList = [('20220824', 'yes')] 
+#   HList = [('20221011', 'yes')] 
 #   HandJudge(HType, HList)
 
 
@@ -49,10 +48,12 @@ def main():
 
 ## ===資料庫相關設定===
 def Create_Table(TableNm):
+    # State: 該日期資料夾是否存在，是否重新模擬
+    # Exist: 該日期檔案是否存在，顯示於網頁上
     cur.execute(""" CREATE TABLE {} (
                     Date DATE PRIMARY KEY,
-                    State VARCHAR NOT NULLa,                      # 該日期資料夾是否存在，是否重新模擬
-                    Exist VARCHAR NOT NULL)""".format(TableNm))   # 該日期檔案是否存在，顯示於網頁上
+                    State VARCHAR NOT NULL, 
+                    Exist VARCHAR )""".format(TableNm)) 
     print(f'Created {TableNm}')
     return
 
@@ -78,7 +79,7 @@ def Remove_DD(HTime):
 def AutoJudge(DirList):
     ## "自動"調整判讀結果及資料庫
     for Dir in DirList:
-       DirNm = workDir+'wrfout.'+Dir+'12'
+       DirNm = wrfDir+'wrfout.'+Dir+'12'
        if os.path.isdir(DirNm): 
           if len(os.listdir(DirNm)) >= DirList[Dir]:
              Insert_DD(Dir, 'yes')  
@@ -112,7 +113,7 @@ def MetFile_Exist():
     ## 自動判讀該日期是否有檔案存在，提拱給網頁
     cur.execute("SELECT * FROM {}".format(TableNm))	   
     for DD in cur.fetchall(): 
-       Fls = [workDir+'wrfout.'+tt.strftime('%Y%m%d')+'12' \
+       Fls = [wrfDir+'wrfout.'+tt.strftime('%Y%m%d')+'12' \
               for tt in pd.date_range(end=str(DD[0]), periods=5)]
        if (os.path.isdir(Fls[0]) and os.path.isdir(Fls[-1])) or \
           (os.path.isdir(Fls[1]) or  os.path.isdir(Fls[2])   or os.path.isdir(Fls[3])):
@@ -129,15 +130,15 @@ def OutPut(DirList):
     print(cur.fetchall())
 
     ## 讀取所有日期並輸出"WebTable.txt"檔案
-    pd.read_sql("SELECT Date,Exist FROM {}".format(TableNm), conn).to_csv('WebTable.txt', index=0)
+    pd.read_sql("SELECT Date,Exist FROM {}".format(TableNm), conn).to_csv(workDir+'WebTable.txt', index=0)
 
     ## 讀取失敗日期並輸出"BadTable.txt"檔案
     pd.read_sql("SELECT Date FROM {} WHERE State='no' AND Date >= '{}'".format(TableNm, list(DirList.keys())[0]),\
-                 conn).to_csv('BadTable.txt', index=0, header=0)
+                 conn).to_csv(workDir+'BadTable.txt', index=0, header=0)
 
     return
 
 
 if __name__ == '__main__':
-    main()
+   main()
 
