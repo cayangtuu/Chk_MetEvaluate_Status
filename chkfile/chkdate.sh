@@ -3,11 +3,11 @@ ulimit -c unlimited
 
 ### Setting Area ###
 
-MainDir=... #執行程式主目錄
-ChkDir=${MainDir}/forecast/chkfile #執行程式工作目錄
-DDtmpDir=${MainDir}/.../wrf/data  #儲存資料檔案目錄
+MainDir=/path/to/main/directory
+ChkDir=${MainDir}/path/to/chkfile
+DDtmpDir=${MainDir}/path/to/wrf/data 
 DDataDir=${DDtmpDir}
-wktmpDir=${MainDir}/.../wrf/wktmp #wrf暫存檔資料目錄
+wktmpDir=${MainDir}/path/to/wrf/wktmp
 
 ### End Of Setting Area ###
 

@@ -7,8 +7,8 @@ import os
 def main():
     global wrfDir, workDir, TableNm, cur, conn
     ## 基本資料設定
-    wrfDir = '.../wrf/data/wrfout/' # WRF檔案目錄
-    workDir = '.../forecast/chkfile/' #執行程式工作目錄
+    wrfDir = '/path/to/data/wrfout/'
+    workDir = '/path/to/chkfile/'
     TableNm = 'WRFDate'
     WrfNm_D4   = 97
 
@@ -16,6 +16,7 @@ def main():
     DirList = {tt.strftime('%Y%m%d'):WrfNm_D4 \
                for tt in pd.date_range(end=yesterDay, periods=8)}
     print(DirList)
+    ExpireDay = (yesterDay-pd.DateOffset(years=1)).strftime('%Y%m%d')
 
 
     ## 連線至資料庫
@@ -26,7 +27,7 @@ def main():
 
     ## 結果判讀及檔案輸出
     # 自動判斷
-    AutoJudge(DirList)
+    AutoJudge(DirList, ExpireDay)
     
     #手動修改
       # 輸入欲做的修改類別，共有'Insert','Update','Remove'3種
@@ -76,7 +77,7 @@ def Remove_DD(HTime):
 
 ### ===進行氣象模擬資料執行結果判讀===
 
-def AutoJudge(DirList):
+def AutoJudge(DirList, ExpireDay):
     ## "自動"調整判讀結果及資料庫
     for Dir in DirList:
        DirNm = wrfDir+'wrfout.'+Dir+'12'
@@ -87,6 +88,8 @@ def AutoJudge(DirList):
              Insert_DD(Dir, 'no')  
        else:
           Insert_DD(Dir, 'no')  
+
+    Remove_DD(ExpireDay)
     return
 
 
